@@ -1,6 +1,7 @@
 <img src="resources/.build_res/logo_128.png" alt="OldEngineIcon" width="150">
 
-[![badge](https://shieldcn.dev/badge/language-C.svg?size=xs&logo=cplusplus)](https://github.com/topics/c)
+[![badge](https://shieldcn.dev/badge/language-C.svg?size=xs&logo=c)](https://github.com/topics/c)
+[![badge](https://shieldcn.dev/badge/example-CXX.svg?size=xs&logo=cplusplus)](https://github.com/topics/cpp)
 
 [![badge](https://shieldcn.dev/badge/build--gen-CMAKE.svg?size=xs&logo=cmake)](https://github.com/topics/cmake)
 [![badge](https://shieldcn.dev/badge/downoload%20deps.%20via-BAT%20/%20SH.svg?size=xs&logo=ri%3ABsTerminalFill)](https://www.youtube.com/watch?v=RaCodgL9cvk&list=RDRaCodgL9cvk&start_radio=1)

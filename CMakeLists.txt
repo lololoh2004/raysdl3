@@ -24,9 +24,9 @@ add_subdirectory(lib/SDL3)
 set(SDLSHADERCROSS_CLI      OFF CACHE BOOL "Disable shadercross CLI tool" FORCE)
 set(SDLSHADERCROSS_VENDORED ON  CACHE BOOL "Use vendored dependencies"    FORCE)
 set(SDLSHADERCROSS_DXC      OFF CACHE BOOL "Disable DXC support"          FORCE)
+set(SDLSHADERCROSS_SHARED   ON  CACHE BOOL "Build shared shadercross"     FORCE)
 
 add_subdirectory(lib/SDL3_shadercross)
-
 
 # ==== RaylibSDL ====
 set(RSDL_BASE
@@ -44,6 +44,7 @@ set(RSDL_BASE
         src/log.c
         src/window/time.c
         include/rsdl/common/default_shaders_content.h
+        src/render/base.c
 )
 
 add_library(${LIB_NAME} STATIC
@@ -53,13 +54,22 @@ target_include_directories(${LIB_NAME} PUBLIC
         src
         include
 )
-target_link_libraries(${LIB_NAME} PUBLIC
+target_link_libraries(${LIB_NAME} PRIVATE
         SDL3::SDL3-shared
         SDL3_shadercross::SDL3_shadercross
 )
 
+if (TARGET spirv-cross-c-shared)
+    set_target_properties(spirv-cross-c-shared PROPERTIES
+            OUTPUT_NAME "SPIRV_cross"
+            DEBUG_POSTFIX ""
+    )
+    if(WIN32)
+        set_target_properties(spirv-cross-c-shared PROPERTIES PREFIX "")
+    endif()
+endif()
 
 
 # ==== Example ====
-add_executable(example example/src/main.cpp)
-target_link_libraries(example PRIVATE rsdl)
+add_executable(exampleBin example/src/main.cpp)
+target_link_libraries(exampleBin PRIVATE rsdl)
