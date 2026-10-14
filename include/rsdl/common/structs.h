@@ -12,7 +12,7 @@ union  SDL_Event;
 struct SDL_GPUShader;
 
 
-typedef struct shader {
+typedef struct shaderPair {
     struct SDL_GPUShader* vert;
     struct SDL_GPUShader* frag;
 } shader;
