@@ -1,3 +1,4 @@
+#include "rsdl/cfg.h"
 #include "rsdl/window.h"
 #include "rsdl/log.h"
 #include "rsdl/render.h"
@@ -10,46 +11,45 @@
 
 SDL_Window* g_window = NULL;
 SDL_GPUDevice* g_gpuDevice = NULL;
-static bool s_isWindow = false;
+bool g_isWindow = false;
+
+static SDL_WindowFlags s_sdlFlags = 0;
+
+
+void getSdlFlags(){
+    if (hasWindowFlag(FLAG_WINDOW_RESIZABLE)){
+        s_sdlFlags |= SDL_WINDOW_RESIZABLE;
+    }
+}
 
 bool initWindow(int width, int height, const char* title){
     if (!SDL_Init(SDL_INIT_VIDEO)){
-        rsdl_logf("SDL root init. failed : %s", SDL_GetError());
+        rsdl_logf(LOG_ERROR, "SDL root initialization failed : %s", SDL_GetError());
         return false;
     }
-    rsdl_log("SDL root initialized");
+    rsdl_log(LOG_INFO, "SDL root initialized");
 
-    g_window = SDL_CreateWindow(title, width, height, SDL_WINDOW_RESIZABLE);
+    getSdlFlags();
+    g_window = SDL_CreateWindow(title, width, height, s_sdlFlags);
     if (!g_window){
-        rsdl_logf("Window creation failed : %s", SDL_GetError());
+        rsdl_logf(LOG_ERROR, "Window creation failed : %s", SDL_GetError());
         SDL_Quit();
         return false;
     }
-    rsdl_log("Window created");
+    rsdl_log(LOG_INFO, "Window created");
 
     if (!initRender()) return false;
 
-    s_isWindow = true;
+    g_isWindow = true;
     return true;
 }
 void closeWindow(void){
     SDL_DestroyWindow(g_window);
     SDL_Quit();
-    rsdl_log("Window destroyed");
+    rsdl_log(LOG_INFO, "Window destroyed");
 }
 
 bool isWindowOpen(void){
-    return s_isWindow;
+    return g_isWindow;
 }
 
-void checkEvents(){
-    SDL_Event event;
-    while (SDL_PollEvent(&event)){
-        switch (event.type){
-            case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-            case SDL_EVENT_QUIT:
-                s_isWindow = false; break;
-            default: break;
-        }
-    }
-}

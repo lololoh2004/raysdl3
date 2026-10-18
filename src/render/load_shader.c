@@ -71,6 +71,7 @@ static void processShader(SDLShaderWrapper* shaderWrap){
 
     if (shaderWrap->sdlShader == NULL) {
         rsdl_logf(
+            LOG_ERROR,
             "Shader compilation failed. Details : \n - SDL_Error : %s",
             SDL_GetError()
         );
@@ -118,10 +119,10 @@ SDL_GPUShader* compileShaderStr(const char* codeStr, size_t inSize, rsdlShaderFo
 void destroyShaders(shader* inShader){
     if (inShader == NULL) return;
 
-    if (inShader->vert != NULL){
-        SDL_ReleaseGPUShader(g_gpuDevice, inShader->vert);  inShader->vert = NULL;
+    if (inShader->vertShader != NULL){
+        SDL_ReleaseGPUShader(g_gpuDevice, inShader->vertShader);  inShader->vertShader = NULL;
     }
-    if (inShader->frag != NULL){
-        SDL_ReleaseGPUShader(g_gpuDevice, inShader->frag);  inShader->frag = NULL;
+    if (inShader->fragShader != NULL){
+        SDL_ReleaseGPUShader(g_gpuDevice, inShader->fragShader);  inShader->fragShader = NULL;
     }
 }

@@ -4,8 +4,16 @@
 #include <stdio.h>
 
 
-static void defltLogHook(const char* text){
-    printf("%s\n", text);
+static const char* logPrefixes[] = {
+    "[ALL]", "[TRACE]", "[DEBUG]", "[INFO]", "[WARN]", "[ERROR]", "[FATAL]", "[NONE]"
+};
+
+static void defltLogHook(logType type, const char* text){
+    if (type > LOG_NONE) {
+        printf("[UNKNOWN] %s\n", text);
+        return;
+    }
+    printf("%s %s\n", logPrefixes[type], text);
 }
 
 static rsdl_logHook curLogHook = defltLogHook;
@@ -18,11 +26,11 @@ void setLogFunc(rsdl_logHook inHook){
     }
 }
 
-void rsdl_log(const char* text){
-    curLogHook(text);
+void rsdl_log(logType type, const char* text){
+    curLogHook(type, text);
 }
 
-void rsdl_logf(const char* format, ...) {
+void rsdl_logf(logType type, const char* format, ...) {
     char buffer[1024];
 
     va_list args;
@@ -30,5 +38,5 @@ void rsdl_logf(const char* format, ...) {
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
-    curLogHook(buffer);
+    curLogHook(type, buffer);
 }

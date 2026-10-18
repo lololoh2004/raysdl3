@@ -7,12 +7,12 @@ int main(){
     constexpr int screenHeight = 450;
 
     // SETUP
-    // SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "raylib-like example");
     SetTargetFPS(60);
 
-    // TraceLog(LOG_INFO, "eee raylib print");
-    // Vector2 pos = { 400.0f, 225.0f };
+    TraceLog(LOG_INFO, "eee raylib print");
+    Vector2 pos = { 400.0f, 225.0f };
 
     // LOOP
     while (!WindowShouldClose()){
@@ -33,9 +33,9 @@ int main(){
         // if (IsKeyPressed(KEY_SPACE)) {
         //     TraceLog(LOG_INFO, "SPACE key is holding");
         // }
-        // if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) {
-        //     pos.y -= 100.0f * dt;
-        // }
+        if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) {
+            pos.y -= 100.0f * dt;
+        }
         // if (IsKeyReleased(KEY_ESCAPE)) {
         //     TraceLog(LOG_INFO, "ESC key detected");
         // }

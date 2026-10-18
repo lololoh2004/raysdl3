@@ -45,6 +45,9 @@ set(RSDL_BASE
         src/window/time.c
         include/rsdl/common/default_shaders_content.h
         src/render/base.c
+        src/window/events.c
+        include/rsdl/cfg.h
+        src/cfg.c
 )
 
 add_library(${LIB_NAME} STATIC

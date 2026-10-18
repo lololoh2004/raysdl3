@@ -7,7 +7,10 @@
 EXPORT_MACRO bool initWindow(int width, int height, const char* title);
 EXPORT_MACRO void closeWindow (void);
 EXPORT_MACRO bool isWindowOpen(void);
+
+
 EXPORT_MACRO void checkEvents (void);
+EXPORT_MACRO bool isKeyScanCodeDown(int key);
 
 
 EXPORT_MACRO void   updateDeltaTime(void);
