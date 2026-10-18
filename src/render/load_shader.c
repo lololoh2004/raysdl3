@@ -8,7 +8,6 @@
 #define VS_ENTRY_POINT "VSMain"
 
 
-
 static void processShader(SDLShaderWrapper* shaderWrap){
     SDL_GPUShaderStage shaderStage = (SDL_GPUShaderStage) shaderWrap->stage;
     const char* entryPoint = shaderStage == SDL_GPU_SHADERSTAGE_VERTEX
@@ -112,10 +111,6 @@ SDL_GPUShader* compileShaderStr(const char* codeStr, size_t inSize, rsdlShaderFo
     return shaderWrap.sdlShader;
 }
 
-// void destroyShader(SDL_GPUShader* inShader){
-//     if (inShader == NULL) return;
-//     SDL_ReleaseGPUShader(g_gpuDevice, inShader);
-// }
 void destroyShaders(shader* inShader){
     if (inShader == NULL) return;
 

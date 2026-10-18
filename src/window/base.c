@@ -11,8 +11,8 @@
 
 SDL_Window* g_window = NULL;
 SDL_GPUDevice* g_gpuDevice = NULL;
-bool g_isWindow = false;
 
+static bool s_isWindow = false;
 static SDL_WindowFlags s_sdlFlags = 0;
 
 
@@ -40,7 +40,7 @@ bool initWindow(int width, int height, const char* title){
 
     if (!initRender()) return false;
 
-    g_isWindow = true;
+    s_isWindow = true;
     return true;
 }
 void closeWindow(void){
@@ -50,6 +50,8 @@ void closeWindow(void){
 }
 
 bool isWindowOpen(void){
-    return g_isWindow;
+    return s_isWindow;
 }
-
+void setWindowAsClosing(void){
+    s_isWindow = false;
+}

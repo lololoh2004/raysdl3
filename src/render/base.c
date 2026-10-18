@@ -5,6 +5,26 @@
 #include "SDL3/SDL_init.h"
 
 
+SDL_GPUGraphicsPipeline* g_graphicPipln = NULL;
+
+
+bool initBasePipLn(){
+    SDL_GPUShader* vert = compileShaderStr(
+        NULL, 0, RSDL_SHADERFORMAT_HLSL_TXT, RSDL_SHADERSTAGE_VERTEX
+    );
+    SDL_GPUShader* frag = compileShaderStr(
+        NULL, 0, RSDL_SHADERFORMAT_HLSL_TXT, RSDL_SHADERSTAGE_VERTEX
+    );
+
+    SDL_GPUGraphicsPipelineCreateInfo piplnInfo = {
+        .vertex_shader = vert,
+        .fragment_shader = frag,
+    };
+    g_graphicPipln = SDL_CreateGPUGraphicsPipeline(g_gpuDevice, &piplnInfo);
+
+    return true;
+}
+
 bool initRender(){
     SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_MSL | SDL_GPU_SHADERFORMAT_DXIL;
     g_gpuDevice = SDL_CreateGPUDevice(formats, true, NULL);

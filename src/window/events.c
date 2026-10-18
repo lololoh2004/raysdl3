@@ -1,4 +1,3 @@
-#include "rsdl/log.h"
 #include "rsdl/window.h"
 #include "SDL3/SDL_events.h"
 
@@ -11,7 +10,7 @@ void checkEvents(void){
         case SDL_EVENT_TERMINATING:
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
         case SDL_EVENT_QUIT:
-            g_isWindow = false; break;
+            setWindowAsClosing(); break;
 
         // case SDL_EVENT_KEY_DOWN:
         //     event.key.scancode

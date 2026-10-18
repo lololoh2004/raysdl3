@@ -36,6 +36,10 @@ int main(){
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) {
             pos.y -= 100.0f * dt;
         }
+        if (IsKeyDown(KEY_ESCAPE)){
+            TraceLog(LOG_INFO, "ESC key detected");
+            break;
+        }
         // if (IsKeyReleased(KEY_ESCAPE)) {
         //     TraceLog(LOG_INFO, "ESC key detected");
         // }

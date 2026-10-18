@@ -1,13 +1,10 @@
 #pragma once
 
-#include <stdbool.h>
-
 
 extern struct SDL_Window*    g_window;
 extern struct SDL_GPUDevice* g_gpuDevice;
+extern struct SDL_GPUGraphicsPipeline* g_graphicPipln;
 extern        unsigned int   g_cfgFlags;
-extern        bool g_isWindow;
-
 
 struct SDL_GPUCommandBuffer;
 struct SDL_GPURenderPass;
