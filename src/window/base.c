@@ -19,6 +19,8 @@ static SDL_WindowFlags s_sdlFlags = 0;
 void getSdlFlags(){
     if (hasWindowFlag(FLAG_WINDOW_RESIZABLE)){
         s_sdlFlags |= SDL_WINDOW_RESIZABLE;
+    } if (hasWindowFlag(FLAG_WINDOW_TRANSPARENT)){
+        s_sdlFlags |= SDL_WINDOW_TRANSPARENT;
     }
 }
 

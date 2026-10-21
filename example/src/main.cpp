@@ -60,7 +60,7 @@ int main(){
 
         BeginDrawing();
         // printf(" - dt : %f\n", getDeltaFloat());
-        ClearBackground(RAYWHITE);
+        ClearBackground({245, 245, 245, 255});
         //     DrawRectangle(350, 175, 100, 100, RED);
         EndDrawing();
     }

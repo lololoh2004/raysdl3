@@ -84,6 +84,6 @@ inline void TraceLog(logType type, const char* text){
     rsdl_log(type, text);
 }
 
-inline void SetConfigFlags(windowFlags flags){
+inline void SetConfigFlags(unsigned int flags){
     setWindowFlags(flags);
 }

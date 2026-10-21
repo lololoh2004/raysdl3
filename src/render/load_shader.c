@@ -8,116 +8,129 @@
 #define VS_ENTRY_POINT "VSMain"
 
 
-static void processShader(SDLShaderWrapper* shaderWrap){
-    SDL_GPUShaderStage shaderStage = (SDL_GPUShaderStage) shaderWrap->stage;
-    const char* entryPoint = shaderStage == SDL_GPU_SHADERSTAGE_VERTEX
+static SDL_GPUShader* processShader(
+    const char* codeData,
+    size_t size,
+    rsdlShaderFormat format,
+    SDL_GPUShaderStage stage)
+{
+    // Common variables
+    SDL_GPUShader* result = NULL;
+    const char* entryPoint = stage == SDL_GPU_SHADERSTAGE_VERTEX
         ? VS_ENTRY_POINT
         : FS_ENTRY_POINT;
 
-    SDL_GPUShaderFormat sdlShaderFormat = SDL_GPU_SHADERFORMAT_INVALID;
-    switch (shaderWrap->fileInfo.format){
-        case RSDL_SHADERFORMAT_SPIRV: sdlShaderFormat = SDL_GPU_SHADERFORMAT_SPIRV; break;
-        case RSDL_SHADERFORMAT_DXIL : sdlShaderFormat = SDL_GPU_SHADERFORMAT_DXIL ; break;
-        default: break;
-    }
-
-    switch (sdlShaderFormat){
-        case SDL_GPU_SHADERFORMAT_SPIRV:
-        case SDL_GPU_SHADERFORMAT_DXIL :{
-            const SDL_GPUShaderCreateInfo shInfo = {
-                .code_size = shaderWrap->fileInfo.size,
-                .code = (const Uint8*) shaderWrap->fileInfo.content,
-                .entrypoint = entryPoint,
-                .stage = shaderStage,
-
-                .format = sdlShaderFormat,
-
-                .num_samplers = 0,
-                .num_storage_buffers = 0,
-                .num_storage_textures = 0,
-                .num_uniform_buffers = 0
-            };
-            shaderWrap->sdlShader = SDL_CreateGPUShader(g_gpuDevice, &shInfo);
-            break;
-        }
-        default:{
-            SDL_ShaderCross_ShaderStage scShaderStage = ( shaderStage == SDL_GPU_SHADERSTAGE_VERTEX )
+    // ByteCode Variables
+    SDL_ShaderCross_ShaderStage scShaderStage = stage == SDL_GPU_SHADERSTAGE_VERTEX
                 ? SDL_SHADERCROSS_SHADERSTAGE_VERTEX
                 : SDL_SHADERCROSS_SHADERSTAGE_FRAGMENT;
 
+    void*  bCode = NULL;   // bCode = byteCode
+    size_t bCodeSize = 0;
+    bool   bCodeNeedsFree = false;
+
+    switch (format)
+    {
+        case RSDL_SHADERFORMAT_SPIRV:
+        {
+            bCode = (void*)codeData;
+            bCodeSize = size;
+            bCodeNeedsFree = false;
+            break;
+        }
+        case RSDL_SHADERFORMAT_HLSL_TXT:
+        {
             const SDL_ShaderCross_HLSL_Info hlslShInfo = {
-                .source = shaderWrap->fileInfo.content,
+                .source = codeData,
                 .entrypoint = entryPoint,
                 .shader_stage = scShaderStage,
             };
-            void* byteCode = SDL_ShaderCross_CompileSPIRVFromHLSL(&hlslShInfo, &shaderWrap->fileInfo.size);
-            if (byteCode == NULL){ break; }
+            bCode = SDL_ShaderCross_CompileSPIRVFromHLSL(&hlslShInfo, &bCodeSize);
+            bCodeNeedsFree = true;
+            break;
+        }
+        case RSDL_SHADERFORMAT_DXIL:
+        {
+            const SDL_GPUShaderCreateInfo shInfo = {
+                .code_size = size,
+                .code = (const Uint8*)codeData,
+                .entrypoint = entryPoint,
+                .stage = stage,
+                .format = SDL_GPU_SHADERFORMAT_DXIL,
+                .num_samplers = 0,
+                .num_uniform_buffers = 0,
+            };
+            result = SDL_CreateGPUShader(g_gpuDevice, &shInfo);
 
-            SDL_ShaderCross_GraphicsShaderMetadata* shMetadata = SDL_ShaderCross_ReflectGraphicsSPIRV(byteCode, shaderWrap->fileInfo.size, 0);
+            return result;
+        }
+        default: break;
+    }
+
+    if (bCode != NULL){
+        SDL_ShaderCross_GraphicsShaderMetadata* bCodeMetadata = SDL_ShaderCross_ReflectGraphicsSPIRV(
+            bCode, bCodeSize, 0
+        );
+        if (bCodeMetadata != NULL){
             SDL_ShaderCross_SPIRV_Info scInfo = {
-                .bytecode = byteCode,
-                .bytecode_size = shaderWrap->fileInfo.size,
+                .bytecode = bCode,
+                .bytecode_size = bCodeSize,
                 .entrypoint = entryPoint,
                 .shader_stage = scShaderStage,
                 .props = 0,
             };
+            result = SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
+                g_gpuDevice, &scInfo, &bCodeMetadata->resource_info, 0
+            );
 
-            shaderWrap->sdlShader = SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(g_gpuDevice, &scInfo, &shMetadata->resource_info, 0);
-            SDL_free(byteCode);
-            SDL_free(shMetadata);
+            SDL_free(bCodeMetadata);
         }
+        if (bCodeNeedsFree) SDL_free(bCode);
     }
 
-    if (shaderWrap->sdlShader == NULL) {
+    if (result == NULL) {
         rsdl_logf(
-            LOG_ERROR,
-            "Shader compilation failed. Details : \n - SDL_Error : %s",
-            SDL_GetError()
+            LOG_ERROR, "Shader compilation failed. Details : \n - SDL_Error : %s", SDL_GetError()
         );
     }
+
+    return result;
 }
 
 SDL_GPUShader* compileShaderStr(const char* codeStr, size_t inSize, rsdlShaderFormat inFormat, rsdlShaderStage inStage){
-    // Shader file info init
-    // Just default values
-    shaderFileInfo shFileInfo = {
-        .isValid = false,
-        .format = RSDL_SHADERFORMAT_HLSL_TXT,
-        .size = inSize,
-        .content = NULL,
-    };
-    // Code FOR shader file info
+    // Default variables
+    SDL_GPUShaderStage sdlShStage = inStage == RSDL_SHADERSTAGE_VERTEX
+        ? SDL_GPU_SHADERSTAGE_VERTEX
+        : SDL_GPU_SHADERSTAGE_FRAGMENT;
+    const char* shCode = NULL;
+    size_t shSize = 0;
+    rsdlShaderFormat finalFormat;
+
     if (codeStr == NULL){
-        shFileInfo.isValid = false;
-        shFileInfo.content = inStage == RSDL_SHADERSTAGE_VERTEX
-            ? (char*) DEFAULT_VERT_SHADER
-            : (char*) DEFAULT_FRAG_SHADER;
-        shFileInfo.size = SDL_strlen(shFileInfo.content);
-    } else {
-        shFileInfo.isValid = true;
-        shFileInfo.format = inFormat;
-        shFileInfo.content = (char*) codeStr;
+        shCode = inStage == RSDL_SHADERSTAGE_VERTEX
+            ? DEFAULT_VERT_SHADER
+            : DEFAULT_FRAG_SHADER;
+        shSize = SDL_strlen(shCode);
+        finalFormat = RSDL_SHADERFORMAT_HLSL_TXT;
+    } else{
+        shCode = codeStr;
+        shSize = inSize;
+        finalFormat = inFormat;
     }
 
-    // Shader wrap struct
-    SDLShaderWrapper shaderWrap = {
-        .fileInfo = shFileInfo,
-        .stage = inStage,
-        .sdlShader = NULL,
-    };
-
     // Compile and return
-    processShader(&shaderWrap);
-    return shaderWrap.sdlShader;
+    return processShader(shCode, shSize, finalFormat, sdlShStage);
 }
 
 void destroyShaders(shader* inShader){
     if (inShader == NULL) return;
 
     if (inShader->vertShader != NULL){
-        SDL_ReleaseGPUShader(g_gpuDevice, inShader->vertShader);  inShader->vertShader = NULL;
+        SDL_ReleaseGPUShader(g_gpuDevice, inShader->vertShader);
+        inShader->vertShader = NULL;
     }
     if (inShader->fragShader != NULL){
-        SDL_ReleaseGPUShader(g_gpuDevice, inShader->fragShader);  inShader->fragShader = NULL;
+        SDL_ReleaseGPUShader(g_gpuDevice, inShader->fragShader);
+        inShader->fragShader = NULL;
     }
 }

@@ -7,19 +7,19 @@ void clearWindowFlags(void){
     g_cfgFlags = 0;
 }
 
-bool hasWindowFlag(windowFlags flag){
+bool hasWindowFlag(unsigned int flag){
     return (g_cfgFlags & flag) != 0;
 }
-bool hasWindowFlags(windowFlags flags){
+bool hasWindowFlags(unsigned int flags){
     return (g_cfgFlags & flags) == flags;
 }
 
-void setWindowFlags(windowFlags flags){
+void setWindowFlags(unsigned int flags){
     g_cfgFlags =  flags;
 }
-void addWindowFlags(windowFlags flags){
+void addWindowFlags(unsigned int flags){
     g_cfgFlags |= flags;
 }
-void delWindowFlags(windowFlags flags){
+void delWindowFlags(unsigned int flags){
     g_cfgFlags &= ~flags;
 }

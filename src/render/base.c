@@ -38,6 +38,7 @@ bool initRender(){
 
     if (!SDL_ClaimWindowForGPUDevice(g_gpuDevice, g_window)){
         rsdl_logf(LOG_ERROR, "Failed to bind GPU to window : %s", SDL_GetError());
+        return false;
     }
     rsdl_log(LOG_INFO, "GPU bound to window");
 
