@@ -14,19 +14,31 @@ set(LIB_NAME "rsdl")
 
 
 # ==== SDL DLL ====
-set(SDL_SHARED  ON  CACHE BOOL "Build shared SDL library" FORCE)
-set(SDL_STATIC  OFF CACHE BOOL "Build static SDL library" FORCE)
-set(SDL_TESTS   OFF CACHE BOOL "Disable SDL tests"        FORCE)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3" "${CMAKE_CURRENT_BINARY_DIR}/SDL3")
+if(WIN32)
+    add_library(SDL3_IMPORTED SHARED IMPORTED)
+    set_target_properties(SDL3_IMPORTED PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/SDL3.dll"
+            IMPORTED_IMPLIB   "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3.dll.a"
+            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3/include"
+    )
 
-
-set(SDLSHADERCROSS_CLI      OFF CACHE BOOL "Disable shadercross CLI tool" FORCE)
-set(SDLSHADERCROSS_VENDORED ON  CACHE BOOL "Use vendored dependencies"    FORCE)
-set(SDLSHADERCROSS_DXC      OFF CACHE BOOL "Disable DXC support"          FORCE)
-set(SDLSHADERCROSS_SHARED   ON  CACHE BOOL "Build shared shadercross"     FORCE)
-
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3_shadercross" "${CMAKE_CURRENT_BINARY_DIR}/SDL3_shadercross")
+    add_library(Shadercross_IMPORTED SHARED IMPORTED)
+    set_target_properties(Shadercross_IMPORTED PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/SDL3_shadercross.dll"
+            IMPORTED_IMPLIB   "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3_shadercross.dll.a"
+            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3_shadercross/include"
+    )
+else()
+    add_library(SDL3_IMPORTED SHARED IMPORTED)
+    set_target_properties(SDL3_IMPORTED PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3.so"
+    )
+    add_library(Shadercross_IMPORTED SHARED IMPORTED)
+    set_target_properties(Shadercross_IMPORTED PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3_shadercross.so"
+    )
+endif()
 
 # ==== RaylibSDL ====
 set(RSDL_BASE
@@ -50,27 +62,16 @@ set(RSDL_BASE
         src/cfg.c
 )
 
-add_library(${LIB_NAME} STATIC
-    ${RSDL_BASE})
+add_library(${LIB_NAME} STATIC ${RSDL_BASE})
 
 target_include_directories(${LIB_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
         "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 target_link_libraries(${LIB_NAME} PUBLIC
-        SDL3::SDL3-shared
-        SDL3_shadercross::SDL3_shadercross
+        SDL3_IMPORTED
+        Shadercross_IMPORTED
 )
-
-if (TARGET spirv-cross-c-shared)
-    set_target_properties(spirv-cross-c-shared PROPERTIES
-            OUTPUT_NAME "SPIRV_cross"
-            DEBUG_POSTFIX ""
-    )
-    if(WIN32)
-        set_target_properties(spirv-cross-c-shared PROPERTIES PREFIX "")
-    endif()
-endif()
 
 
 # ==== Example ====
