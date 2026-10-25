@@ -18,25 +18,25 @@ set(LIB_NAME "rsdl")
 if(WIN32)
     add_library(SDL3_IMPORTED SHARED IMPORTED)
     set_target_properties(SDL3_IMPORTED PROPERTIES
-            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/SDL3.dll"
-            IMPORTED_IMPLIB   "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3.dll.a"
+            IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/SDL3.dll"
+            IMPORTED_IMPLIB   "${CMAKE_SOURCE_DIR}/libSDL3.dll.a"
             INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3/include"
     )
 
     add_library(Shadercross_IMPORTED SHARED IMPORTED)
     set_target_properties(Shadercross_IMPORTED PROPERTIES
-            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/SDL3_shadercross.dll"
-            IMPORTED_IMPLIB   "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3_shadercross.dll.a"
+            IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/SDL3_shadercross.dll"
+            IMPORTED_IMPLIB   "${CMAKE_SOURCE_DIR}/libSDL3_shadercross.dll.a"
             INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL3_shadercross/include"
     )
 else()
     add_library(SDL3_IMPORTED SHARED IMPORTED)
     set_target_properties(SDL3_IMPORTED PROPERTIES
-            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3.so"
+            IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/libSDL3.so"
     )
     add_library(Shadercross_IMPORTED SHARED IMPORTED)
     set_target_properties(Shadercross_IMPORTED PROPERTIES
-            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libSDL3_shadercross.so"
+            IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/libSDL3_shadercross.so"
     )
 endif()
 
