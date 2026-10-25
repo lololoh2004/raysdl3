@@ -1,4 +1,4 @@
-#include "rsdl_raylib_wrap.h"
+#include "raylib_wrap.h"
 #include <cstdio>
 
 // EXAMPLE OF USING LIB
@@ -45,7 +45,7 @@ int main(){
         // }
 
         // INPUT ( MOUSE )
-        // Vector2 mousePos = GetMousePosition();
+        Vector2 mousePos = GetMousePosition();
         // float wheelMove = GetMouseWheelMove();
         // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         //     TraceLog(LOG_INFO, TextFormat("Mouse click in : X: %.1f, Y: %.1f", mousePos.x, mousePos.y));

@@ -1,6 +1,11 @@
 @echo off
 chcp 65001 > nul
 
+
+echo Cloning cGLM headers
+git clone --depth 1 https://github.com/recp/cglm "lib/cglm"
+
+
 echo Cloning SDL headers
 git clone --depth 1 https://github.com/libsdl-org/SDL "lib/SDL3"
 git clone --depth 1 https://github.com/libsdl-org/SDL_shadercross "lib/SDL3_shadercross"

@@ -89,8 +89,8 @@ static SDL_GPUShader* processShader(
     }
 
     if (result == NULL) {
-        rsdl_logf(
-            LOG_ERROR, "Shader compilation failed. Details : \n - SDL_Error : %s", SDL_GetError()
+        SDL_LogError(
+            SDL_LOG_CATEGORY_GPU, "Shader compilation failed. Details : \n - SDL_Error : %s", SDL_GetError()
         );
     }
 

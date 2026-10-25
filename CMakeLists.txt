@@ -48,7 +48,7 @@ set(RSDL_BASE
         src/render/load_shader.c
         include/rsdl/window.h
         src/window/base.c
-        include/rsdl_raylib_wrap.h
+        include/raylib_wrap.h
         include/rsdl/common/structs.h
         include/rsdl/common/enums.h
         include/rsdl/common/export_macro.h
@@ -60,6 +60,8 @@ set(RSDL_BASE
         src/window/events.c
         include/rsdl/cfg.h
         src/cfg.c
+        include/rsdl/input.h
+        src/input/mouse.c
 )
 
 add_library(${LIB_NAME} STATIC ${RSDL_BASE})
@@ -67,6 +69,7 @@ add_library(${LIB_NAME} STATIC ${RSDL_BASE})
 target_include_directories(${LIB_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
         "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib/cglm/include"
 )
 target_link_libraries(${LIB_NAME} PUBLIC
         SDL3_IMPORTED

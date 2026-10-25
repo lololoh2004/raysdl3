@@ -1,42 +1,20 @@
 #include "rsdl/log.h"
 
-#include <stdarg.h>
 #include <stdio.h>
+
+#include "SDL3/SDL_log.h"
 
 
 static const char* logPrefixes[] = {
-    "[ALL]", "[TRACE]", "[DEBUG]", "[INFO]", "[WARN]", "[ERROR]", "[FATAL]", "[NONE]"
+    "[INVALID]", "[TRACE]", "[VERBOSE]", "[DEBUG]", "[INFO]", "[WARN]", "[ERROR]", "[CRITICAL]", "[COUNT]"
 };
 
-static void defltLogHook(logType type, const char* text){
-    if (type > LOG_NONE) {
-        printf("[UNKNOWN] %s\n", text);
+void rsdlLogHook(void* userdata, int category, SDL_LogPriority priority, const char* text){
+    if (priority < SDL_LOG_PRIORITY_TRACE || priority >= SDL_LOG_PRIORITY_COUNT) {
+        printf("[%i] [UNKNOWN] %s\n", category, text);
         return;
     }
-    printf("%s %s\n", logPrefixes[type], text);
-}
+    printf("[%i] %s %s\n", category, logPrefixes[priority], text);
 
-static rsdl_logHook curLogHook = defltLogHook;
-
-void setLogFunc(rsdl_logHook inHook){
-    if (inHook){
-        curLogHook = inHook;
-    } else {
-        curLogHook = defltLogHook;
-    }
-}
-
-void rsdl_log(logType type, const char* text){
-    curLogHook(type, text);
-}
-
-void rsdl_logf(logType type, const char* format, ...) {
-    char buffer[1024];
-
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    va_end(args);
-
-    curLogHook(type, buffer);
+    if (userdata != NULL) printf(" - Additional data : %p", userdata);
 }
