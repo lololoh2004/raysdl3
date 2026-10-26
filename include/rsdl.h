@@ -11,6 +11,8 @@ extern "C" {
 #include "rsdl/cfg.h"
 #include "rsdl/input.h"
 
+#include "cglm/struct/vec2.h"
+
 #ifdef __cplusplus
 }
 #endif

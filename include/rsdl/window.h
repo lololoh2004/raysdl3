@@ -18,6 +18,8 @@ EXPORT_MACRO void   updateDeltaTime(void);
 // EXPORT_MACRO void   updateTime(void);
 EXPORT_MACRO float  getDeltaFloat(void);
 EXPORT_MACRO double getDeltaDouble(void);
+EXPORT_MACRO double getTime(void);
+EXPORT_MACRO int getFPS(void);
 
 EXPORT_MACRO void setMaxFPS(int fps);
 EXPORT_MACRO void sleepBeforeNextFrame(void);

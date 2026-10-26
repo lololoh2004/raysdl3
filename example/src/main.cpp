@@ -5,6 +5,7 @@
 int main(){
     constexpr int screenWidth = 800;
     constexpr int screenHeight = 450;
+    clr bgColor = {245, 245, 245, 255};
 
     // SETUP
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -19,7 +20,7 @@ int main(){
         // TIME CHECK
         float dt = GetFrameTime();
         // double time = GetTime();
-        // int fps = GetFPS();
+        int fps = GetFPS();
         //
         // int width = GetScreenWidth();
         // int height = GetScreenHeight();
@@ -47,9 +48,12 @@ int main(){
         // INPUT ( MOUSE )
         Vector2 mousePos = GetMousePosition();
         // float wheelMove = GetMouseWheelMove();
-        // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        //     TraceLog(LOG_INFO, TextFormat("Mouse click in : X: %.1f, Y: %.1f", mousePos.x, mousePos.y));
-        // }
+        bgColor = {245, 245, 245, 255};
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            // TraceLog(LOG_INFO, TextFormat("Mouse click in : X: %.1f, Y: %.1f", mousePos.x, mousePos.y));
+            // TraceLog(LOG_INFO, "MOUSE_BUTTON_LEFT");
+            bgColor = { 0, 0, 0, 255 };
+        }
         // if (wheelMove != 0.0f) {
         //     TraceLog(LOG_INFO, TextFormat("Mouse wheel has rotated : %.1f", wheelMove));
         // }
@@ -60,7 +64,7 @@ int main(){
 
         BeginDrawing();
         // printf(" - dt : %f\n", getDeltaFloat());
-        ClearBackground({245, 245, 245, 255});
+        ClearBackground(bgColor);
         //     DrawRectangle(350, 175, 100, 100, RED);
         EndDrawing();
     }

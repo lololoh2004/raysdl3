@@ -1,4 +1,5 @@
 #include "rsdl/window.h"
+
 #include "SDL3/SDL_timer.h"
 
 
@@ -24,6 +25,13 @@ float getDeltaFloat(void){
 }
 double getDeltaDouble(void){
     return s_deltaTime;
+}
+
+double getTime(void){
+    return (double)SDL_GetTicks() / 1000.0;
+}
+int getFPS(void){
+    return (int)(1.0f / s_deltaTime);
 }
 
 void setMaxFPS(int fps){
