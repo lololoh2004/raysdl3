@@ -4,6 +4,8 @@
 #include <stdbool.h>
 
 
+union SDL_Event;
+
 EXPORT_MACRO bool initWindow(int width, int height, const char* title);
 EXPORT_MACRO void closeWindow (void);
 EXPORT_MACRO bool isWindowOpen(void);
@@ -12,6 +14,7 @@ EXPORT_MACRO void setWindowAsClosing(void);
 
 EXPORT_MACRO void checkEvents (void);
 EXPORT_MACRO bool isKeyScanCodeDown(int key);
+EXPORT_MACRO const union SDL_Event* getRawSDLEvent(void);
 
 
 EXPORT_MACRO void   updateDeltaTime(void);
