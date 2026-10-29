@@ -1,5 +1,8 @@
 #include "rsdl/cfg.h"
 
+#include "rsdl/common/structs.h"
+#include "SDL3/SDL_gpu.h"
+
 
 unsigned int g_cfgFlags = 0;
 

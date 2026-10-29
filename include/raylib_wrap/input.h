@@ -1,9 +1,8 @@
 #pragma once
 
-#include "structs.h"
+#include "common.h"
 
 #include "rsdl/input.h"
-#include "rsdl/window.h"
 #include <SDL3/SDL_mouse.h>
 
 

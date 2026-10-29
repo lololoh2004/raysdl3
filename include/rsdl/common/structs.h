@@ -1,11 +1,6 @@
 #pragma once
 
 
-extern struct SDL_Window*    g_window;
-extern struct SDL_GPUDevice* g_gpuDevice;
-extern struct SDL_GPUGraphicsPipeline* g_graphicPipln;
-extern        unsigned int   g_cfgFlags;
-
 struct SDL_GPUCommandBuffer;
 struct SDL_GPURenderPass;
 struct SDL_GPUTexture;
@@ -16,7 +11,7 @@ struct SDL_GPUShader;
 typedef struct shaderPair{
     struct SDL_GPUShader* vertShader;
     struct SDL_GPUShader* fragShader;
-} shader;
+} shaderPair;
 
 typedef struct color{
     unsigned char r, g, b, a;
@@ -38,3 +33,10 @@ typedef enum{
     LOG_FATAL,
     LOG_NONE
 } logType;
+
+
+extern struct SDL_Window*    g_window;
+extern struct SDL_GPUDevice* g_gpuDevice;
+extern struct SDL_GPUGraphicsPipeline* g_graphicPipeln;
+extern        unsigned int   g_cfgFlags;
+// extern        shaderPair     g_curShaderPair;

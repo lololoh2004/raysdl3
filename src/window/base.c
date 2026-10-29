@@ -17,7 +17,7 @@ static bool s_isWindow = false;
 static SDL_WindowFlags s_sdlFlags = 0;
 
 
-static void getSdlFlags(){
+static void convertRLibFlags(void){
     if (hasWindowFlag(FLAG_WINDOW_RESIZABLE)){
         s_sdlFlags |= SDL_WINDOW_RESIZABLE;
     } if (hasWindowFlag(FLAG_WINDOW_TRANSPARENT)){
@@ -35,7 +35,7 @@ bool initWindow(int width, int height, const char* title){
     }
     SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "SDL root initialized");
 
-    getSdlFlags();
+    convertRLibFlags();
     g_window = SDL_CreateWindow(title, width, height, s_sdlFlags);
     if (!g_window){
         SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Window creation failed : %s", SDL_GetError());

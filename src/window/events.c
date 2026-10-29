@@ -1,4 +1,5 @@
 #include "rsdl/window.h"
+
 #include "SDL3/SDL_events.h"
 
 
@@ -17,17 +18,6 @@ void checkEvents(void){
         default: break;
         }
     }
-}
-
-bool isKeyScanCodeDown(int key){
-    int numkeys;
-    const bool* keyStates = SDL_GetKeyboardState(&numkeys);
-
-    if (key < 0 || key >= numkeys){
-        return false;
-    }
-
-    return keyStates[key];
 }
 
 const SDL_Event* getRawSDLEvent(void){

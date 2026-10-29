@@ -63,11 +63,12 @@ set(RSDL_BASE
         include/rsdl/input.h
         src/input/mouse.c
         include/raylib_wrap/input.h
-        include/raylib_wrap/structs.h
+        include/raylib_wrap/common.h
         include/raylib_wrap/window.h
         include/raylib_wrap/log.h
         include/raylib_wrap/render.h
         include/raylib_wrap/cfg.h
+        src/input/keyboard.c
 )
 
 add_library(${LIB_NAME} STATIC ${RSDL_BASE})

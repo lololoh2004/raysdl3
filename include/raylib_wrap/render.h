@@ -19,7 +19,7 @@ inline void EndDrawing(){
 }
 
 
-inline shader LoadShaderFromMemory(const char* vsCode, const char* fsCode){
+inline shaderPair LoadShaderFromMemory(const char* vsCode, const char* fsCode){
     SDL_GPUShader* vsPtr = compileShaderStr(
 
         vsCode,
@@ -33,8 +33,8 @@ inline shader LoadShaderFromMemory(const char* vsCode, const char* fsCode){
         RSDL_SHADERFORMAT_HLSL_TXT,
         RSDL_SHADERSTAGE_FRAGMENT
     );
-    return (shader) { vsPtr, fsPtr };
+    return (shaderPair) { vsPtr, fsPtr };
 }
-inline void UnloadShader(shader* inShader){
+inline void UnloadShader(shaderPair* inShader){
     destroyShaders(inShader);
 }

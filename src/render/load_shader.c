@@ -49,21 +49,21 @@ static SDL_GPUShader* processShader(
             bCodeNeedsFree = true;
             break;
         }
-        case RSDL_SHADERFORMAT_DXIL:
-        {
-            const SDL_GPUShaderCreateInfo shInfo = {
-                .code_size = size,
-                .code = (const Uint8*)codeData,
-                .entrypoint = entryPoint,
-                .stage = stage,
-                .format = SDL_GPU_SHADERFORMAT_DXIL,
-                .num_samplers = 0,
-                .num_uniform_buffers = 0,
-            };
-            result = SDL_CreateGPUShader(g_gpuDevice, &shInfo);
-
-            return result;
-        }
+        // case RSDL_SHADERFORMAT_DXIL:
+        // {
+        //     const SDL_GPUShaderCreateInfo shInfo = {
+        //         .code_size = size,
+        //         .code = (const Uint8*)codeData,
+        //         .entrypoint = entryPoint,
+        //         .stage = stage,
+        //         .format = SDL_GPU_SHADERFORMAT_DXIL,
+        //         .num_samplers = 0,
+        //         .num_uniform_buffers = 0,
+        //     };
+        //     result = SDL_CreateGPUShader(g_gpuDevice, &shInfo);
+        //
+        //     return result;
+        // }
         default: break;
     }
 
@@ -122,7 +122,7 @@ SDL_GPUShader* compileShaderStr(const char* codeStr, size_t inSize, rsdlShaderFo
     return processShader(shCode, shSize, finalFormat, sdlShStage);
 }
 
-void destroyShaders(shader* inShader){
+void destroyShaders(shaderPair* inShader){
     if (inShader == NULL) return;
 
     if (inShader->vertShader != NULL){

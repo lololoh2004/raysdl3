@@ -13,7 +13,6 @@ EXPORT_MACRO void setWindowAsClosing(void);
 
 
 EXPORT_MACRO void checkEvents (void);
-EXPORT_MACRO bool isKeyScanCodeDown(int key);
 EXPORT_MACRO const union SDL_Event* getRawSDLEvent(void);
 
 

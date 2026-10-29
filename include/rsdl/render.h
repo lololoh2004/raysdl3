@@ -43,4 +43,4 @@ EXPORT_MACRO void drawCircle   (int centerX, int centerY, float radius, clr colo
 
 
 EXPORT_MACRO struct SDL_GPUShader* compileShaderStr(const char* codeStr, size_t inSize, rsdlShaderFormat inFormat, rsdlShaderStage inStage);
-EXPORT_MACRO void destroyShaders(shader* inShader);
+EXPORT_MACRO void destroyShaders(shaderPair* inShader);
